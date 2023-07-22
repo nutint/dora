@@ -1,5 +1,11 @@
 # @nutint/dora
 
+## 0.2.0
+
+### Minor Changes
+
+- 88d9762: add averageLeadTime
+
 ## 0.1.2
 
 ### Patch Changes
