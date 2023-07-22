@@ -1,3 +1,4 @@
-const greeter = (name: string) => `Hello ${name}`;
+import { greeter } from "./greeter";
 
 export { greeter }
+

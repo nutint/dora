@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest"
-import {greeter} from "../index";
+
+import {greeter} from "../greeter";
 
 describe("index", () => {
   describe("greeter", () => {
