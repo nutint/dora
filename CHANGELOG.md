@@ -1,5 +1,11 @@
 # @nutint/dora
 
+## 0.1.2
+
+### Patch Changes
+
+- 00f773d: move greeter outside index
+
 ## 0.1.1
 
 ### Patch Changes
