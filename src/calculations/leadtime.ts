@@ -1,4 +1,4 @@
-import dayjs, {Dayjs} from "dayjs";
+import dayjs, { Dayjs } from "dayjs"
 
 type LeadTimeUnit = {
   days: number
@@ -7,14 +7,18 @@ type LeadTimeUnit = {
   seconds: number
 }
 
-export const averageLeadTime = (currentTime: Dayjs, commitTimes: Dayjs[]): LeadTimeUnit | undefined => {
-  if(commitTimes.length === 0)
-    return undefined
+export const averageLeadTime = (
+  currentTime: Dayjs,
+  commitTimes: Dayjs[],
+): LeadTimeUnit | undefined => {
+  if (commitTimes.length === 0) return undefined
 
   const currentTimeInMilliseconds = currentTime.valueOf()
-  const averageCommitTimeStamps = commitTimes
-    .map(commitTime => currentTimeInMilliseconds - commitTime.valueOf())
-    .reduce((summarized, current) => summarized + current, 0) / commitTimes.length
+  const averageCommitTimeStamps =
+    commitTimes
+      .map((commitTime) => currentTimeInMilliseconds - commitTime.valueOf())
+      .reduce((summarized, current) => summarized + current, 0) /
+    commitTimes.length
 
   const firstDay = dayjs(0)
   const averageDuration = dayjs(averageCommitTimeStamps)
@@ -25,4 +29,4 @@ export const averageLeadTime = (currentTime: Dayjs, commitTimes: Dayjs[]): LeadT
     minutes: averageDuration.diff(firstDay, "minutes") % 60,
     seconds: averageDuration.diff(firstDay, "seconds") % 60,
   }
-};
+}
