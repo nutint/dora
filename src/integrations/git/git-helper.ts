@@ -22,8 +22,13 @@ export const GitHelper = (config: GitHelperConfig) => ({
   deleteRemoteTag: (tag: string) => {
     execSync(`git push --delete ${config.origin} ${tag}`)
   },
-  getCommits: (begin: string, end: string) => {
+  getCommits: <T>(
+    begin: string,
+    end: string,
+    transformer?: (commitHash?: string) => T,
+  ): string[] | T[] => {
     const result = execSync(`git log --pretty=format:" % h" ^${begin} ${end}`)
-    return result.toString().split("\n")
+    const rawResult = result.toString().split("\n")
+    return transformer ? rawResult.map(transformer) : rawResult
   },
 })

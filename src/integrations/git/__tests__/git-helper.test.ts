@@ -112,5 +112,15 @@ describe("GitHelper", () => {
 
       expect(actual).toEqual(["abc", "def"])
     })
+
+    it("should support transformer", () => {
+      const actual = getCommits(
+        "begin",
+        "end",
+        (commitHash: string): string => `hello ${commitHash}`,
+      )
+
+      expect(actual).toEqual(["hello abc", "hello def"])
+    })
   })
 })
