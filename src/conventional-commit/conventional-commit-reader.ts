@@ -1,5 +1,14 @@
 export enum ConventionalCommitType {
   feat = "feat",
+  fix = "fix",
+  refactor = "refactor",
+  perf = "perf",
+  style = "style",
+  test = "test",
+  docs = "docs",
+  build = "build",
+  ops = "ops",
+  chore = "chore",
 }
 
 export type NonConventionalCommit = {
@@ -22,7 +31,20 @@ export const readCommitMessage = (commitMessage: string): Commit => {
   const [typeAndScope] = colonSeparatedMessage
 
   const type = typeAndScope.split("(")[0]
-  if (!["feat"].includes(type)) {
+  if (
+    ![
+      ConventionalCommitType.feat,
+      ConventionalCommitType.fix,
+      ConventionalCommitType.refactor,
+      ConventionalCommitType.perf,
+      ConventionalCommitType.style,
+      ConventionalCommitType.test,
+      ConventionalCommitType.docs,
+      ConventionalCommitType.build,
+      ConventionalCommitType.ops,
+      ConventionalCommitType.chore,
+    ].includes(type as ConventionalCommitType)
+  ) {
     return {
       isConventionalCommit: false,
       subject: commitMessage,
