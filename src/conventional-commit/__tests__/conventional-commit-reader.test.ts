@@ -53,7 +53,7 @@ describe("ConventionalCommitReader", () => {
 
       expect(commitInfo).toEqual({
         isConventionalCommit: false,
-        subject: commitMessage,
+        subject: "abcDef",
       })
     })
 
@@ -69,7 +69,20 @@ describe("ConventionalCommitReader", () => {
       })
     })
 
-    it("should return isConventionalCommit false when commit footer is not separated by blank line", () => {
+    it("should support multi line body when body have multiple line without blank line", () => {
+      const commitMessage =
+        "feat: abcDef\n" + "\n" + "body message\nsecond line body message"
+      const commitInfo = readCommitMessage(commitMessage)
+
+      expect(commitInfo).toEqual({
+        isConventionalCommit: true,
+        type: "feat",
+        subject: "abcDef",
+        body: "body message\nsecond line body message",
+      })
+    })
+
+    it("should return breaking changes as part of body when commit footer is not separated by blank line", () => {
       const commitMessage = [
         "feat: abcDef",
         "",
@@ -79,8 +92,23 @@ describe("ConventionalCommitReader", () => {
       const commitInfo = readCommitMessage(commitMessage)
 
       expect(commitInfo).toEqual({
-        isConventionalCommit: false,
-        subject: commitMessage,
+        isConventionalCommit: true,
+        type: "feat",
+        subject: "abcDef",
+        body: "body message\nBREAKING CHANGES: some breaking changes",
+      })
+    })
+
+    it("should not add new line when body part end with just new line", () => {
+      const commitMessage =
+        "feat: abcDef\n" + "\n" + "body message\nsecond line body message\n"
+      const commitInfo = readCommitMessage(commitMessage)
+
+      expect(commitInfo).toEqual({
+        isConventionalCommit: true,
+        type: "feat",
+        subject: "abcDef",
+        body: "body message\nsecond line body message",
       })
     })
 
@@ -100,6 +128,25 @@ describe("ConventionalCommitReader", () => {
         subject: "abcDef",
         body: "body message",
         breakingChanges: "some breaking changes",
+      })
+    })
+
+    it("should support multiple line breaking changes", () => {
+      const commitMessage = [
+        "feat: abcDef",
+        "",
+        "body message",
+        "",
+        "BREAKING CHANGES: some breaking changes\nremaining",
+      ].join("\n")
+      const commitInfo = readCommitMessage(commitMessage)
+
+      expect(commitInfo).toEqual({
+        isConventionalCommit: true,
+        type: "feat",
+        subject: "abcDef",
+        body: "body message",
+        breakingChanges: "some breaking changes\nremaining",
       })
     })
 
