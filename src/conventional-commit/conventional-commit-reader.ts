@@ -1,6 +1,25 @@
-export const readCommitMessage = (commitMessage: string) => {
-  const colonSeparatedMesssage = commitMessage.split(":")
-  const [typeAndScope] = colonSeparatedMesssage
+export enum ConventionalCommitType {
+  feat = "feat",
+}
+
+export type NonConventionalCommit = {
+  isConventionalCommit: false
+  subject: string
+}
+
+export type ConventionalCommit = {
+  isConventionalCommit: true
+  type: ConventionalCommitType
+  subject: string
+  scope?: string
+  body?: string
+  breakingChanges?: string
+}
+export type Commit = NonConventionalCommit | ConventionalCommit
+
+export const readCommitMessage = (commitMessage: string): Commit => {
+  const colonSeparatedMessage = commitMessage.split(":")
+  const [typeAndScope] = colonSeparatedMessage
 
   const type = typeAndScope.split("(")[0]
   if (!["feat"].includes(type)) {
@@ -10,7 +29,7 @@ export const readCommitMessage = (commitMessage: string) => {
     }
   }
 
-  const subjectAndBodyAndFooter = colonSeparatedMesssage.slice(1).join(":")
+  const subjectAndBodyAndFooter = colonSeparatedMessage.slice(1).join(":")
   const [subject, bodySeparator, body, footerSeparator, footer] =
     subjectAndBodyAndFooter.split("\n")
   if (bodySeparator !== undefined && bodySeparator !== "") {
@@ -38,7 +57,7 @@ export const readCommitMessage = (commitMessage: string) => {
   const scope = matches !== null ? matches[1] : undefined
   return {
     isConventionalCommit: true,
-    type,
+    type: type as ConventionalCommitType,
     scope,
     subject: subject.trim(),
     body,
