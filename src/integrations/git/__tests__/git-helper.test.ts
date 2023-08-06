@@ -99,21 +99,22 @@ describe("GitHelper", () => {
 
   describe("getCommits", () => {
     const { getCommits } = gitHelper
+    const transformer = (gitCommit: string) => gitCommit
 
     beforeEach(() => {
       ;(execSync as any).mockClear().mockReturnValue(["abc\ndef"])
     })
 
     it("should add tag correctly", () => {
-      getCommits("begin", "end")
+      getCommits("begin", "end", transformer)
 
       expect(execSync).toHaveBeenCalledWith(
-        'git log --pretty=format:" % h" ^begin end',
+        `git log --pretty=format:\"%h\" ^begin end`,
       )
     })
 
     it("should return correctly", () => {
-      const actual = getCommits("begin", "end")
+      const actual = getCommits("begin", "end", transformer)
 
       expect(actual).toEqual(["abc", "def"])
     })

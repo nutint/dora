@@ -27,16 +27,17 @@ export const GitHelper = (config: GitHelperConfig) => ({
   getCommits: <T>(
     begin: string,
     end: string,
-    transformer?: (commitHash?: string) => T,
-  ): string[] | T[] => {
-    const result = execSync(`git log --pretty=format:" % h" ^${begin} ${end}`)
+    transformer: (commitHash: string) => T,
+  ): T[] => {
+    const result = execSync(`git log --pretty=format:\"%h\" ^${begin} ${end}`)
     const rawResult = result.toString().split("\n")
-    return transformer ? rawResult.map(transformer) : rawResult
+    return rawResult.map(transformer)
   },
   getCommitInfo: (commitHash: string): { message: string; date: Dayjs } => {
-    const { message, date } = gitCommitInfo({ commit: commitHash })
+    const commitInfo = gitCommitInfo({ commit: commitHash })
+    const { message, date } = commitInfo
     if (date === undefined || message === undefined) {
-      throw new Error("Invalid commit as required message, and commit date")
+      throw new Error(`Invalid commit as required message, and commit date`)
     }
     return {
       message,
