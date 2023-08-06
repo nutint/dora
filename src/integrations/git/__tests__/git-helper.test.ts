@@ -1,10 +1,15 @@
-import { describe, it, expect, vi, beforeAll, beforeEach } from "vitest"
+import { describe, it, expect, vi, beforeEach } from "vitest"
 import { GitHelper } from "../git-helper"
 import { execSync } from "child_process"
+import gitCommitInfo from "git-commit-info"
+// @ts-ignore
+import dayjs from "dayjs"
 
 vi.mock("child_process", () => ({
   execSync: vi.fn(),
 }))
+
+vi.mock("git-commit-info")
 
 describe("GitHelper", () => {
   const origin = "origin"
@@ -121,6 +126,57 @@ describe("GitHelper", () => {
       )
 
       expect(actual).toEqual(["hello abc", "hello def"])
+    })
+  })
+
+  describe("getCommitInfo", () => {
+    const { getCommitInfo } = gitHelper
+
+    const commitHash = "commitHash"
+    const responseCommitInfo = {
+      message: "message",
+      date: "2012-09-09",
+    }
+
+    beforeEach(() => {
+      ;(gitCommitInfo as any).mockClear().mockReturnValue(responseCommitInfo)
+    })
+
+    it("should call gitCommitInfo correctly", () => {
+      getCommitInfo(commitHash)
+
+      expect(gitCommitInfo).toHaveBeenCalledWith({ commit: commitHash })
+    })
+
+    it("should return correctly", () => {
+      const actual = getCommitInfo(commitHash)
+
+      expect(actual).toEqual({
+        message: responseCommitInfo.message,
+        date: dayjs(responseCommitInfo.date),
+      })
+    })
+
+    it("should throw error when message is undefined", () => {
+      ;(gitCommitInfo as any).mockClear().mockReturnValue({
+        ...responseCommitInfo,
+        message: undefined,
+      })
+
+      expect(() => getCommitInfo(commitHash)).toThrow(
+        new Error("Invalid commit as required message, and commit date"),
+      )
+    })
+
+    it("should throw error when date is not defined", () => {
+      ;(gitCommitInfo as any).mockClear().mockReturnValue({
+        ...responseCommitInfo,
+        date: undefined,
+      })
+
+      expect(() => getCommitInfo(commitHash)).toThrow(
+        new Error("Invalid commit as required message, and commit date"),
+      )
     })
   })
 })

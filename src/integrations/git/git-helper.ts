@@ -1,4 +1,6 @@
 import { execSync } from "child_process"
+import gitCommitInfo from "git-commit-info"
+import dayjs, { Dayjs } from "dayjs"
 
 type GitHelperConfig = {
   origin: string
@@ -30,5 +32,15 @@ export const GitHelper = (config: GitHelperConfig) => ({
     const result = execSync(`git log --pretty=format:" % h" ^${begin} ${end}`)
     const rawResult = result.toString().split("\n")
     return transformer ? rawResult.map(transformer) : rawResult
+  },
+  getCommitInfo: (commitHash: string): { message: string; date: Dayjs } => {
+    const { message, date } = gitCommitInfo({ commit: commitHash })
+    if (date === undefined || message === undefined) {
+      throw new Error("Invalid commit as required message, and commit date")
+    }
+    return {
+      message,
+      date: dayjs(date),
+    }
   },
 })

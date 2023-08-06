@@ -41,7 +41,8 @@
     "vitest": "^0.33.0"
   },
   "dependencies": {
-    "dayjs": "^1.11.9"
+    "dayjs": "^1.11.9",
+    "git-commit-info": "^2.0.2"
   },
   "pnpm": {
     "overrides": {
