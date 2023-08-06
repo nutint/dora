@@ -91,4 +91,26 @@ describe("GitHelper", () => {
       expect(execSync).toHaveBeenCalledWith("git push --delete origin 1.2345")
     })
   })
+
+  describe("getCommits", () => {
+    const { getCommits } = gitHelper
+
+    beforeEach(() => {
+      ;(execSync as any).mockClear().mockReturnValue(["abc\ndef"])
+    })
+
+    it("should add tag correctly", () => {
+      getCommits("begin", "end")
+
+      expect(execSync).toHaveBeenCalledWith(
+        'git log --pretty=format:" % h" ^begin end',
+      )
+    })
+
+    it("should return correctly", () => {
+      const actual = getCommits("begin", "end")
+
+      expect(actual).toEqual(["abc", "def"])
+    })
+  })
 })
