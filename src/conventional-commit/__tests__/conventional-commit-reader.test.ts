@@ -1,8 +1,6 @@
 import { describe, it, expect } from "vitest"
-import {
-  ConventionalCommitType,
-  readCommitMessage,
-} from "../conventional-commit-reader"
+import { readCommitMessage } from "../conventional-commit-reader"
+import { ConventionalCommitType } from "../types"
 
 describe("ConventionalCommitReader", () => {
   describe("readCommitMessage", () => {
