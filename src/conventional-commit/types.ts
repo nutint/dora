@@ -1,15 +1,18 @@
-export enum ConventionalCommitType {
-  feat = "feat",
-  fix = "fix",
-  refactor = "refactor",
-  perf = "perf",
-  style = "style",
-  test = "test",
-  docs = "docs",
-  build = "build",
-  ops = "ops",
-  chore = "chore",
-}
+export const ConventionalCommitTypes = {
+  feat: "feat",
+  fix: "fix",
+  refactor: "refactor",
+  perf: "perf",
+  style: "style",
+  test: "test",
+  docs: "docs",
+  build: "build",
+  ops: "ops",
+  chore: "chore",
+} as const
+
+export type ConventionalCommitType =
+  (typeof ConventionalCommitTypes)[keyof typeof ConventionalCommitTypes]
 
 export type NonConventionalCommit = {
   isConventionalCommit: false

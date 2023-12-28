@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { readCommitMessage } from "../conventional-commit-reader"
-import { ConventionalCommitType } from "../types"
+import { ConventionalCommitTypes } from "../types"
 
 describe("ConventionalCommitReader", () => {
   describe("readCommitMessage", () => {
@@ -151,16 +151,16 @@ describe("ConventionalCommitReader", () => {
     })
 
     it.each([
-      { fromMessage: "feat", expected: ConventionalCommitType.feat },
-      { fromMessage: "fix", expected: ConventionalCommitType.fix },
-      { fromMessage: "refactor", expected: ConventionalCommitType.refactor },
-      { fromMessage: "perf", expected: ConventionalCommitType.perf },
-      { fromMessage: "style", expected: ConventionalCommitType.style },
-      { fromMessage: "test", expected: ConventionalCommitType.test },
-      { fromMessage: "docs", expected: ConventionalCommitType.docs },
-      { fromMessage: "build", expected: ConventionalCommitType.build },
-      { fromMessage: "ops", expected: ConventionalCommitType.ops },
-      { fromMessage: "chore", expected: ConventionalCommitType.chore },
+      { fromMessage: "feat", expected: ConventionalCommitTypes.feat },
+      { fromMessage: "fix", expected: ConventionalCommitTypes.fix },
+      { fromMessage: "refactor", expected: ConventionalCommitTypes.refactor },
+      { fromMessage: "perf", expected: ConventionalCommitTypes.perf },
+      { fromMessage: "style", expected: ConventionalCommitTypes.style },
+      { fromMessage: "test", expected: ConventionalCommitTypes.test },
+      { fromMessage: "docs", expected: ConventionalCommitTypes.docs },
+      { fromMessage: "build", expected: ConventionalCommitTypes.build },
+      { fromMessage: "ops", expected: ConventionalCommitTypes.ops },
+      { fromMessage: "chore", expected: ConventionalCommitTypes.chore },
     ])(
       "read commit from message $fromMessage should be type $expected",
       ({ fromMessage, expected }) => {

@@ -1,4 +1,4 @@
-import { Commit, ConventionalCommitType } from "./types"
+import { Commit, ConventionalCommitTypes } from "./types"
 
 export const readCommitMessage = (commitMessage: string): Commit => {
   const lineSeparatedCommitMessage = commitMessage.split("\n")
@@ -33,17 +33,17 @@ const readFirstLine = (commitMessageFirstLine: string): Commit => {
   const type = typeAndScope.split("(")[0]
   if (
     ![
-      ConventionalCommitType.feat,
-      ConventionalCommitType.fix,
-      ConventionalCommitType.refactor,
-      ConventionalCommitType.perf,
-      ConventionalCommitType.style,
-      ConventionalCommitType.test,
-      ConventionalCommitType.docs,
-      ConventionalCommitType.build,
-      ConventionalCommitType.ops,
-      ConventionalCommitType.chore,
-    ].includes(type as ConventionalCommitType)
+      ConventionalCommitTypes.feat,
+      ConventionalCommitTypes.fix,
+      ConventionalCommitTypes.refactor,
+      ConventionalCommitTypes.perf,
+      ConventionalCommitTypes.style,
+      ConventionalCommitTypes.test,
+      ConventionalCommitTypes.docs,
+      ConventionalCommitTypes.build,
+      ConventionalCommitTypes.ops,
+      ConventionalCommitTypes.chore,
+    ].includes(type as ConventionalCommitTypes)
   ) {
     return {
       isConventionalCommit: false,
@@ -56,7 +56,7 @@ const readFirstLine = (commitMessageFirstLine: string): Commit => {
   const scope = matches !== null ? matches[1] : undefined
   return {
     isConventionalCommit: true,
-    type: type as ConventionalCommitType,
+    type: type as ConventionalCommitTypes,
     scope,
     subject: subject.trim(),
   }
